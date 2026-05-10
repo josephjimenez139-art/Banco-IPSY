@@ -74,6 +74,43 @@
         }
         .tarjeta:hover { transform: translateY(-2px); box-shadow: 0 20px 45px rgba(0,76,151,0.12); }
         
+        /* Sección destacada (Simulador) */
+        .destacado-contenido {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .destacado-texto {
+            flex: 2;
+            min-width: 240px;
+        }
+        .destacado-imagen {
+            flex: 1;
+            text-align: center;
+            font-size: 5rem;
+            color: #004C97;
+            background: #E1F0FF;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+        @media (max-width: 768px) {
+            .destacado-contenido {
+                flex-direction: column;
+                text-align: center;
+            }
+            .destacado-imagen {
+                width: 100px;
+                height: 100px;
+                font-size: 3.5rem;
+            }
+        }
+        
         h2 {
             font-size: 1.6rem; font-weight: 700; color: #292E38;
             margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;
@@ -231,7 +268,7 @@
     <div class="tarjeta">
         <h2><i class="fas fa-briefcase"></i> Productos</h2>
         <div class="productos-grid">
-            <a href="#" class="producto-card">
+            <a href="cuentas.html" class="producto-card">
                 <i class="fas fa-university"></i>
                 <h3>Cuentas</h3>
                 <p>Cuenta corriente empresarial, cuenta digital y cuenta planilla para tu negocio.</p>
@@ -241,7 +278,7 @@
                 <h3>Tarjetas</h3>
                 <p>Tarjetas de crédito y débito empresariales con beneficios exclusivos.</p>
             </a>
-            <a href="seguros para pymes.html" class="producto-card">
+            <a href="seguros-para-pymes.html" class="producto-card">
                 <i class="fas fa-shield-alt"></i>
                 <h3>Seguros</h3>
                 <p>Protegé tu negocio con seguros contra robos, incendios y responsabilidad civil, entre otros.</p>
@@ -309,11 +346,12 @@
             </div>
         </div>
         <div style="text-align: center; margin-top: 1.5rem;">
-            <a href="calculadora pymes.html" class="boton-primario">
-                <i class="fas fa-calculator"></i> Simulá tu calculo
+            <a href="calculadora-pymes.html" class="boton-primario">
+                <i class="fas fa-calculator"></i> Simulá tu cálculo
             </a>
         </div>
     </div>
+
     <!-- Sección destacada: Simulador de préstamos (análogo a Cuenta Joven) -->
     <div class="tarjeta">
         <div class="destacado-contenido">
@@ -328,7 +366,7 @@
                     <li><i class="fas fa-check-circle"></i> Cálculo al instante con tabla de amortización.</li>
                     <li><i class="fas fa-check-circle"></i> 100% digital, solo unos clics.</li>
                 </ul>
-                <a href="calculadora de prestamo comercial.html" class="boton-primario" style="margin-top: 1rem;">
+                <a href="calculadora-de-prestamo-comercial.html" class="boton-primario" style="margin-top: 1rem;">
                     <i class="fas fa-calculator"></i> Calcular ahora
                 </a>
             </div>
