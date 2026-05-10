@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco IPSY – Seguros para Empresas</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #E1F0FF 0%, #F4F9FF 100%);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            display: flex; justify-content: center;
+        }
+        .contenedor-pagina {
+            max-width: 1100px; width: 100%;
+        }
+        .encabezado {
+            text-align: center; margin-bottom: 2.5rem;
+        }
+        .encabezado h1 {
+            font-size: 2.2rem; font-weight: 700; color: #292E38; margin-bottom: 0.5rem;
+        }
+        .encabezado p {
+            color: #6F7583; font-size: 1.1rem;
+        }
+        /* Lista de seguros */
+        .lista-seguros {
+            display: flex; flex-direction: column; gap: 1rem;
+        }
+        .seguro-item {
+            background: #FFFFFF; border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,76,151,0.06);
+            border: 1px solid #E1F0FF;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        .seguro-item:hover {
+            box-shadow: 0 12px 30px rgba(0,76,151,0.1);
+        }
+        .seguro-cabecera {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.2rem 1.5rem; cursor: pointer;
+            user-select: none;
+        }
+        .seguro-cabecera:hover {
+            background: #FAFCFF;
+        }
+        .seguro-titulo {
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .seguro-titulo i {
+            font-size: 1.8rem; color: #004C97; width: 2rem; text-align: center;
+        }
+        .seguro-titulo h3 {
+            font-size: 1.15rem; font-weight: 600; color: #292E38;
+        }
+        .seguro-acciones {
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .btn-cobertura {
+            background: transparent; border: 1.5px solid #004C97; color: #004C97;
+            padding: 6px 14px; border-radius: 8px; font-weight: 600;
+            font-size: 0.85rem; cursor: pointer; transition: 0.2s;
+        }
+        .btn-cobertura:hover { background: #E1F0FF; }
+        .btn-cotizar {
+            background: #004C97; color: #fff; border: none;
+            padding: 6px 14px; border-radius: 8px; font-weight: 600;
+            font-size: 0.85rem; cursor: pointer; transition: background 0.2s;
+        }
+        .btn-cotizar:hover { background: #1677D8; }
+        .flecha {
+            color: #004C97; font-size: 1rem; transition: transform 0.2s;
+        }
+        .seguro-item.abierto .flecha {
+            transform: rotate(180deg);
+        }
+        /* Contenido desplegable */
+        .cobertura-detalle {
+            display: none; padding: 0 1.5rem 1.5rem; border-top: 1px solid #E1F0FF;
+        }
+        .seguro-item.abierto .cobertura-detalle {
+            display: block;
+        }
+        .suma-asegurada {
+            background: #F0F7FF; border-radius: 10px; padding: 0.8rem 1rem;
+            margin: 1rem 0; font-weight: 600; color: #004C97;
+        }
+        .riesgos {
+            margin-bottom: 1rem;
+        }
+        .riesgos h4, .coberturas-lista h4 {
+            font-size: 0.95rem; font-weight: 600; color: #292E38; margin-bottom: 0.5rem;
+        }
+        .riesgos p {
+            font-size: 0.9rem; color: #444C5E; line-height: 1.5;
+        }
+        .coberturas-lista ul {
+            list-style: none; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+        }
+        .coberturas-lista li {
+            font-size: 0.9rem; color: #444C5E;
+            display: flex; align-items: baseline; gap: 0.5rem;
+        }
+        .coberturas-lista li i {
+            color: #004C97; font-size: 0.75rem; margin-top: 0.2rem;
+        }
+
+        /* Modal (el mismo de siempre) */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.4);
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal.activo { display: flex; }
+        .modal-contenido {
+            background: white; border-radius: 20px; padding: 2rem;
+            max-width: 400px; width: 90%; text-align: left;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        .modal-contenido h3 { margin-bottom: 1rem; color: #004C97; }
+        .modal-contenido input {
+            width: 100%; padding: 10px; margin: 0.5rem 0 1rem;
+            border: 1px solid #D9E7F8; border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+        .modal-contenido .btn-cotizar { width: 100%; }
+        .cerrar-modal {
+            background: none; border: none; float: right;
+            font-size: 1.5rem; color: #6F7583; cursor: pointer;
+        }
+        .volver {
+            display: inline-block; margin-top: 2rem; color: #004C97;
+            font-weight: 500; text-decoration: none;
+        }
+        .volver:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="contenedor-pagina">
+    <div class="encabezado">
+        <h1>Seguros para tu Empresa</h1>
+        <p>Protegé tu negocio con coberturas claras y suma asegurada a tu medida.</p>
+    </div>
+
+    <div class="lista-seguros" id="listaSeguros"></div>
+
+    <div style="text-align: center;">
+        <a href="pymes.html" class="volver"><i class="fas fa-arrow-left"></i> Volver a Pymes</a>
+    </div>
+</div>
+
+<!-- Modal de cotización -->
+<div class="modal" id="modalCotizar">
+    <div class="modal-contenido">
+        <button class="cerrar-modal" onclick="cerrarModal()">&times;</button>
+        <h3>Solicitar cotización – <span id="tipoSeguro"></span></h3>
+        <form id="formCotizar" onsubmit="enviarCotizacion(event)">
+            <label for="nombre">Nombre de la empresa</label>
+            <input type="text" id="nombre" required>
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" required>
+            <label for="telefono">Teléfono</label>
+            <input type="tel" id="telefono">
+            <button type="submit" class="btn-cotizar">
+                <i class="fas fa-paper-plane"></i> Enviar solicitud
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Datos de cada seguro
+    const seguros = [
+        {
+            icono: "fas fa-car", titulo: "Auto Comercial",
+            suma: "Hasta $50,000 por vehículo",
+            contra: "Protege tu flotilla contra daños propios, robo total o parcial, y responsabilidad frente a terceros.",
+            coberturas: [
+                "Daños materiales por colisión o vuelco",
+                "Robo total o parcial",
+                "Responsabilidad civil por lesiones a terceros",
+                "Responsabilidad civil por daños a propiedad ajena",
+                "Defensa legal"
+            ]
+        },
+        {
+            icono: "fas fa-briefcase-medical", titulo: "Salud Colectivo",
+            suma: "Cobertura desde $5,000 hasta $100,000 por empleado",
+            contra: "Cubre los gastos médicos de tus empleados ante enfermedad o accidente, dentro y fuera del país.",
+            coberturas: [
+                "Consultas médicas y especialistas",
+                "Exámenes de laboratorio e imagen",
+                "Hospitalización y cirugías",
+                "Medicamentos recetados",
+                "Maternidad (opcional)"
+            ]
+        },
+        {
+            icono: "fas fa-heart", titulo: "Vida Colectivo",
+            suma: "Suma asegurada desde $10,000 hasta $250,000",
+            contra: "Indemniza a los beneficiarios en caso de fallecimiento o invalidez del empleado.",
+            coberturas: [
+                "Muerte por cualquier causa",
+                "Incapacidad total y permanente",
+                "Doble indemnización por accidente",
+                "Adelanto por enfermedad terminal"
+            ]
+        },
+        {
+            icono: "fas fa-fire", titulo: "Incendio",
+            suma: "Hasta el valor real del inmueble y contenido",
+            contra: "Protege tu edificio, maquinaria y mercancía contra pérdidas por fuego y eventos relacionados.",
+            coberturas: [
+                "Daños por incendio y explosión",
+                "Humo y calor",
+                "Daños por agua de extinción",
+                "Gastos de demolición y remoción",
+                "Pérdida de rentas"
+            ]
+        },
+        {
+            icono: "fas fa-laptop", titulo: "Equipo Electrónico",
+            suma: "Desde $5,000 hasta $200,000",
+            contra: "Cubre daños accidentales de tus equipos electrónicos (computadoras, servidores, impresoras).",
+            coberturas: [
+                "Daño accidental (caídas, golpes)",
+                "Sobrecarga eléctrica o cortocircuito",
+                "Robo con violencia",
+                "Reposición del equipo"
+            ]
+        },
+        {
+            icono: "fas fa-truck", titulo: "Equipo Pesado",
+            suma: "Hasta $500,000 por equipo",
+            contra: "Ampara maquinaria de construcción, grúas, montacargas, etc.",
+            coberturas: [
+                "Volcadura o colisión",
+                "Robo total",
+                "Incendio y rayo",
+                "Responsabilidad civil por uso"
+            ]
+        },
+        {
+            icono: "fas fa-mask", titulo: "Robo Comercial",
+            suma: "Hasta $30,000 en contenido",
+            contra: "Protege la mercancía y mobiliario de tu negocio ante robo con violencia.",
+            coberturas: [
+                "Robo con fuerza en el local",
+                "Daños a la propiedad por el robo",
+                "Reposición de inventario hurtado"
+            ]
+        },
+        {
+            icono: "fas fa-gavel", titulo: "Responsabilidad Civil",
+            suma: "Límites desde $100,000 hasta $1,000,000",
+            contra: "Cubre indemnizaciones por lesiones o daños que tu negocio cause a terceros.",
+            coberturas: [
+                "Lesiones corporales a clientes o visitantes",
+                "Daños a propiedad de terceros",
+                "Defensa legal y fianzas judiciales"
+            ]
+        },
+        {
+            icono: "fas fa-file-signature", titulo: "Fianzas",
+            suma: "Hasta el monto contractual exigido",
+            contra: "Garantiza el cumplimiento de contratos frente a entidades públicas o privadas.",
+            coberturas: [
+                "Fianza de cumplimiento",
+                "Fianza de oferta",
+                "Fianza de anticipo"
+            ]
+        },
+        {
+            icono: "fas fa-cogs", titulo: "Rotura de Maquinaria",
+            suma: "Hasta el valor de reposición del equipo",
+            contra: "Indemniza por daños internos fortuitos que inutilicen la maquinaria.",
+            coberturas: [
+                "Rotura por falla mecánica",
+                "Errores de operación",
+                "Falta de lubricación",
+                "Costos de reparación urgente"
+            ]
+        },
+        {
+            icono: "fas fa-boxes", titulo: "Mercancías",
+            suma: "Según valor declarado de la carga",
+            contra: "Protege tus bienes durante el transporte terrestre, aéreo o marítimo.",
+            coberturas: [
+                "Robo de la carga",
+                "Daños por accidente del vehículo",
+                "Mojadura por agua de lluvia o mar",
+                "Falta de entrega"
+            ]
+        },
+        {
+            icono: "fas fa-ship", titulo: "Casco Marítimo",
+            suma: "Valor de la embarcación asegurada",
+            contra: "Cubre pérdidas o daños a embarcaciones comerciales o de pesca.",
+            coberturas: [
+                "Hundimiento o varadura",
+                "Colisión con otros objetos",
+                "Incendio o explosión a bordo",
+                "Gastos de salvamento"
+            ]
+        },
+        {
+            icono: "fas fa-plane", titulo: "Aviación",
+            suma: "Según el valor de la aeronave",
+            contra: "Ampara aeronaves privadas o comerciales ante accidentes y responsabilidad civil.",
+            coberturas: [
+                "Daños a la aeronave (casco)",
+                "Responsabilidad civil frente a pasajeros",
+                "Responsabilidad civil frente a terceros en tierra"
+            ]
+        },
+        {
+            icono: "fas fa-hard-hat", titulo: "Todo Riesgo Construcción",
+            suma: "Hasta el valor total de la obra",
+            contra: "Cubre daños materiales durante la construcción o montaje de una obra.",
+            coberturas: [
+                "Daños por derrumbe o colapso",
+                "Incendio en la obra",
+                "Robo de materiales",
+                "Responsabilidad civil del contratista"
+            ]
+        }
+    ];
+
+    const lista = document.getElementById('listaSeguros');
+
+    seguros.forEach(seguro => {
+        const item = document.createElement('div');
+        item.className = 'seguro-item';
+        item.innerHTML = `
+            <div class="seguro-cabecera" onclick="toggleCobertura(this)">
+                <div class="seguro-titulo">
+                    <i class="${seguro.icono}"></i>
+                    <h3>${seguro.titulo}</h3>
+                </div>
+                <div class="seguro-acciones">
+                    <button class="btn-cobertura" onclick="event.stopPropagation(); toggleCobertura(this.closest('.seguro-cabecera'))">Ver cobertura</button>
+                    <button class="btn-cotizar" onclick="event.stopPropagation(); abrirModal('${seguro.titulo}')">Cotizar</button>
+                    <i class="fas fa-chevron-down flecha"></i>
+                </div>
+            </div>
+            <div class="cobertura-detalle">
+                <div class="suma-asegurada">Suma asegurada: ${seguro.suma}</div>
+                <div class="riesgos">
+                    <h4>Contra qué protege</h4>
+                    <p>${seguro.contra}</p>
+                </div>
+                <div class="coberturas-lista">
+                    <h4>Coberturas incluidas</h4>
+                    <ul>
+                        ${seguro.coberturas.map(c => `<li><i class="fas fa-check-circle"></i> ${c}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+        lista.appendChild(item);
+    });
+
+    function toggleCobertura(cabecera) {
+        const item = cabecera.parentElement;
+        item.classList.toggle('abierto');
+    }
+
+    function abrirModal(tipo) {
+        document.getElementById('tipoSeguro').textContent = tipo;
+        document.getElementById('modalCotizar').classList.add('activo');
+    }
+    function cerrarModal() {
+        document.getElementById('modalCotizar').classList.remove('activo');
+    }
+    function enviarCotizacion(event) {
+        event.preventDefault();
+        alert('¡Gracias! Hemos recibido tu solicitud de cotización. Un asesor te contactará pronto.');
+        cerrarModal();
+        document.getElementById('formCotizar').reset();
+    }
+    window.onclick = function(event) {
+        const modal = document.getElementById('modalCotizar');
+        if (event.target === modal) cerrarModal();
+    }
+</script>
+</body>
+</html>

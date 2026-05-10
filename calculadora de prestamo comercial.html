@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco IPSY – Calculadora de Préstamos Comerciales</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #E1F0FF 0%, #F4F9FF 100%);
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            padding: 1.5rem;
+        }
+        .pantalla {
+            background: #FFFFFF; border-radius: 24px;
+            box-shadow: 0 20px 45px rgba(0,76,151,0.08), 0 4px 12px rgba(0,76,151,0.04);
+            max-width: 600px; width: 100%; padding: 2.5rem 2.2rem;
+            text-align: center; transition: transform 0.25s;
+        }
+        .pantalla:hover { transform: translateY(-3px); box-shadow: 0 28px 55px rgba(0,76,151,0.12); }
+        .icono-banco {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 80px; height: 80px; background: #E1F0FF; border-radius: 50%;
+            font-size: 2.5rem; color: #004C97; margin-bottom: 1.2rem;
+        }
+        h1 { font-size: 2rem; font-weight: 700; color: #292E38; margin-bottom: 0.5rem; }
+        .subtitulo { font-size: 1rem; color: #6F7583; margin-bottom: 2rem; }
+
+        .campo {
+            margin-bottom: 1.2rem; text-align: left;
+        }
+        .campo label {
+            display: block; font-weight: 600; font-size: 0.9rem; color: #292E38; margin-bottom: 0.4rem;
+        }
+        .campo input, .campo select {
+            width: 100%; padding: 12px 14px; border: 1.5px solid #D9E7F8;
+            border-radius: 10px; font-size: 1rem; font-family: 'Inter', sans-serif;
+            background: #FBFDFF; transition: border-color 0.2s;
+        }
+        .campo input:focus, .campo select:focus {
+            outline: none; border-color: #004C97; box-shadow: 0 0 0 3px rgba(0,76,151,0.12);
+        }
+        .boton-primario {
+            display: inline-block; background-color: #004C97; color: #FFFFFF;
+            font-weight: 600; font-size: 1rem; padding: 13px 32px; border-radius: 12px;
+            border: none; box-shadow: 0 4px 14px rgba(0,76,151,0.18);
+            transition: all 0.25s; cursor: pointer; width: 100%; margin-top: 0.5rem;
+        }
+        .boton-primario:hover { background-color: #1677D8; transform: translateY(-1px); }
+        .boton-secundario {
+            display: inline-block; margin-top: 1rem; color: #004C97;
+            font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: color 0.2s;
+            cursor: pointer; background: none; border: none;
+        }
+        .boton-secundario:hover { color: #1677D8; }
+        .resultado {
+            background: #F8FBFF; border-radius: 16px; padding: 1.5rem;
+            margin-top: 1.8rem; text-align: left; border: 1px solid #E1F0FF;
+        }
+        .resultado h3 { font-size: 1.2rem; color: #292E38; margin-bottom: 1rem; font-weight: 600; }
+        .resultado p { font-size: 0.95rem; color: #444C5E; margin-bottom: 0.5rem; }
+        .resultado span { font-weight: 700; color: #004C97; }
+        .oculto { display: none; }
+        .volver {
+            display: inline-block; margin-top: 1.5rem; color: #004C97;
+            font-weight: 500; text-decoration: none;
+        }
+        .volver:hover { text-decoration: underline; }
+
+        .tabla-amortizacion {
+            margin-top: 1.2rem; overflow-x: auto;
+        }
+        table {
+            width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.5rem;
+        }
+        th {
+            background: #E1F0FF; color: #004C97; font-weight: 600;
+            padding: 10px 6px; text-align: center; border-radius: 6px 6px 0 0;
+        }
+        td {
+            padding: 8px 6px; text-align: right; border-bottom: 1px solid #E1F0FF;
+        }
+        td:first-child, th:first-child { text-align: center; }
+
+        /* Modal */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.4);
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal.activo { display: flex; }
+        .modal-contenido {
+            background: white; border-radius: 20px; padding: 2rem;
+            max-width: 450px; width: 90%; text-align: left;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); position: relative;
+        }
+        .modal-contenido h3 { margin-bottom: 1rem; color: #004C97; }
+        .modal-contenido input {
+            width: 100%; padding: 10px; margin: 0.5rem 0 1rem;
+            border: 1px solid #D9E7F8; border-radius: 8px; font-family: 'Inter', sans-serif;
+        }
+        .cerrar-modal {
+            position: absolute; top: 0.8rem; right: 1rem;
+            background: none; border: none; font-size: 1.5rem; color: #6F7583; cursor: pointer;
+        }
+        @media (max-width: 480px) {
+            .pantalla { padding: 2rem 1.5rem; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="pantalla">
+    <div class="icono-banco"><i class="fas fa-chart-line"></i></div>
+    <h1>Préstamo Comercial</h1>
+    <p class="subtitulo">Calculá las condiciones de tu crédito empresarial</p>
+
+    <form id="loan-form">
+        <div class="campo">
+            <label for="monto">Monto del préstamo ($)</label>
+            <input type="number" id="monto" required min="500" step="0.01" placeholder="Ej: 100,000">
+        </div>
+        <div class="campo">
+            <label for="tasa">Tasa de interés anual (%)</label>
+            <input type="number" id="tasa" required min="0" step="0.01" placeholder="Ej: 12">
+        </div>
+        <div class="campo">
+            <label for="plazo">Plazo total (meses)</label>
+            <input type="number" id="plazo" required min="1" step="1" placeholder="Ej: 60">
+        </div>
+        <div class="campo">
+            <label for="comision">Comisión de apertura (%)</label>
+            <input type="number" id="comision" required min="0" step="0.01" value="0" placeholder="Ej: 2">
+        </div>
+        <div class="campo">
+            <label for="gracia">Período de gracia (meses, solo intereses)</label>
+            <input type="number" id="gracia" required min="0" step="1" value="0" placeholder="Ej: 3">
+        </div>
+
+        <button type="submit" class="boton-primario">
+            <i class="fas fa-calculator"></i> Calcular cuota
+        </button>
+    </form>
+
+    <!-- Resultado -->
+    <div id="resultado" class="resultado oculto">
+        <h3>Resultado</h3>
+        <p>Cuota mensual (después de gracia): <span id="cuota"></span></p>
+        <p>Total a pagar: <span id="total"></span></p>
+        <p>Intereses totales: <span id="intereses"></span></p>
+        <p>Comisión de apertura: <span id="comisionTotal"></span></p>
+        <button id="ver-tabla" class="boton-secundario">
+            <i class="fas fa-table"></i> Ver tabla de amortización
+        </button>
+        <div id="tabla-amortizacion" class="tabla-amortizacion oculto"></div>
+        <button id="btn-solicitar" class="boton-primario" style="margin-top:1.5rem;" onclick="abrirModalSolicitud()">
+            <i class="fas fa-file-invoice"></i> Solicitar este préstamo
+        </button>
+    </div>
+
+    <a href="empresas.html" class="volver"><i class="fas fa-arrow-left"></i> Volver a Empresas</a>
+</div>
+
+<!-- Modal de solicitud -->
+<div class="modal" id="modalSolicitud">
+    <div class="modal-contenido">
+        <button class="cerrar-modal" onclick="cerrarModalSolicitud()">&times;</button>
+        <h3>Solicitar préstamo comercial</h3>
+        <div class="info-prestamo" style="background:#F0F7FF; border-radius:12px; padding:1rem; margin-bottom:1.5rem; font-size:0.9rem; color:#292E38;">
+            <p><strong>Monto:</strong> $<span id="info-monto"></span></p>
+            <p><strong>Plazo:</strong> <span id="info-plazo"></span> meses</p>
+            <p><strong>Tasa anual:</strong> <span id="info-tasa"></span>%</p>
+            <p><strong>Cuota mensual:</strong> $<span id="info-cuota"></span></p>
+        </div>
+        <form id="formSolicitud" onsubmit="enviarSolicitud(event)">
+            <label for="nombreSolicitud">Nombre de la empresa</label>
+            <input type="text" id="nombreSolicitud" required>
+            <label for="emailSolicitud">Correo electrónico</label>
+            <input type="email" id="emailSolicitud" required>
+            <label for="telefonoSolicitud">Teléfono</label>
+            <input type="tel" id="telefonoSolicitud">
+            <button type="submit" class="boton-primario" style="width: 100%; margin-top: 0.5rem;">
+                <i class="fas fa-paper-plane"></i> Enviar solicitud
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Formateo de números
+    function formatearNumero(num) {
+        return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Variables globales del préstamo actual
+    let prestamoActual = {};
+
+    document.getElementById('loan-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const monto = parseFloat(document.getElementById('monto').value);
+        const tasaAnual = parseFloat(document.getElementById('tasa').value);
+        const plazo = parseInt(document.getElementById('plazo').value);
+        const comisionPorc = parseFloat(document.getElementById('comision').value) / 100;
+        const gracia = parseInt(document.getElementById('gracia').value);
+        
+        if (isNaN(monto) || isNaN(tasaAnual) || isNaN(plazo) || monto <= 0 || tasaAnual < 0 || plazo <= 0 || gracia >= plazo) {
+            alert('Verificá los datos ingresados. El período de gracia debe ser menor que el plazo total.');
+            return;
+        }
+        
+        const tasaMensual = (tasaAnual / 100) / 12;
+        const comisionMonto = monto * comisionPorc;
+        const montoFinanciado = monto + comisionMonto; // La comisión se suma al capital
+        
+        let cuota = 0;
+        let totalPagado = 0;
+        let interesesTotales = 0;
+        
+        // Si hay período de gracia
+        if (gracia > 0) {
+            // Durante la gracia solo se pagan intereses sobre el monto original
+            const interesesGracia = montoFinanciado * tasaMensual * gracia;
+            interesesTotales = interesesGracia;
+            
+            // Plazo restante para amortizar
+            const plazoRestante = plazo - gracia;
+            if (plazoRestante > 0) {
+                if (tasaMensual === 0) {
+                    cuota = montoFinanciado / plazoRestante;
+                } else {
+                    cuota = montoFinanciado * (tasaMensual * Math.pow(1 + tasaMensual, plazoRestante)) / (Math.pow(1 + tasaMensual, plazoRestante) - 1);
+                }
+                const totalAmort = cuota * plazoRestante;
+                interesesTotales += totalAmort - montoFinanciado;
+                totalPagado = interesesGracia + totalAmort;
+            } else {
+                cuota = 0; // solo gracia
+                totalPagado = interesesGracia + montoFinanciado;
+            }
+        } else {
+            // Sin gracia, cálculo normal
+            if (tasaMensual === 0) {
+                cuota = montoFinanciado / plazo;
+            } else {
+                cuota = montoFinanciado * (tasaMensual * Math.pow(1 + tasaMensual, plazo)) / (Math.pow(1 + tasaMensual, plazo) - 1);
+            }
+            totalPagado = cuota * plazo;
+            interesesTotales = totalPagado - montoFinanciado;
+        }
+        
+        // Guardar préstamo actual
+        prestamoActual = {
+            monto: monto,
+            tasa: tasaAnual,
+            plazo: plazo,
+            comisionPorc: comisionPorc * 100,
+            comisionMonto: comisionMonto,
+            gracia: gracia,
+            cuota: cuota,
+            total: totalPagado,
+            intereses: interesesTotales,
+            montoFinanciado: montoFinanciado
+        };
+        
+        // Mostrar resultados
+        document.getElementById('cuota').textContent = '$' + formatearNumero(cuota);
+        document.getElementById('total').textContent = '$' + formatearNumero(totalPagado);
+        document.getElementById('intereses').textContent = '$' + formatearNumero(interesesTotales);
+        document.getElementById('comisionTotal').textContent = '$' + formatearNumero(comisionMonto);
+        document.getElementById('resultado').classList.remove('oculto');
+        document.getElementById('tabla-amortizacion').classList.add('oculto');
+        document.getElementById('tabla-amortizacion').innerHTML = '';
+        
+        // Llenar info del modal
+        document.getElementById('info-monto').textContent = formatearNumero(monto);
+        document.getElementById('info-plazo').textContent = plazo;
+        document.getElementById('info-tasa').textContent = tasaAnual;
+        document.getElementById('info-cuota').textContent = formatearNumero(cuota);
+    });
+
+    // Tabla de amortización
+    document.getElementById('ver-tabla').addEventListener('click', function() {
+        if (!prestamoActual.monto) return;
+        const { montoFinanciado, tasa, plazo, gracia, cuota } = prestamoActual;
+        const tasaMensual = (tasa / 100) / 12;
+        let saldo = montoFinanciado;
+        let html = '<table><tr><th>Mes</th><th>Cuota</th><th>Interés</th><th>Capital</th><th>Saldo</th></tr>';
+        
+        // Período de gracia
+        for (let i = 1; i <= gracia; i++) {
+            const interes = saldo * tasaMensual;
+            html += `<tr>
+                <td>${i}</td>
+                <td>$${formatearNumero(interes)}</td>
+                <td>$${formatearNumero(interes)}</td>
+                <td>$0.00</td>
+                <td>$${formatearNumero(saldo)}</td>
+            </tr>`;
+        }
+        
+        // Amortización
+        const plazoRestante = plazo - gracia;
+        for (let i = 1; i <= plazoRestante; i++) {
+            const interes = saldo * tasaMensual;
+            const capital = cuota - interes;
+            saldo -= capital;
+            html += `<tr>
+                <td>${gracia + i}</td>
+                <td>$${formatearNumero(cuota)}</td>
+                <td>$${formatearNumero(interes)}</td>
+                <td>$${formatearNumero(capital)}</td>
+                <td>$${formatearNumero(Math.max(0, saldo))}</td>
+            </tr>`;
+        }
+        html += '</table>';
+        document.getElementById('tabla-amortizacion').innerHTML = html;
+        document.getElementById('tabla-amortizacion').classList.remove('oculto');
+    });
+
+    // Modal de solicitud
+    function abrirModalSolicitud() {
+        if (!prestamoActual.monto) {
+            alert('Primero debés calcular el préstamo.');
+            return;
+        }
+        document.getElementById('modalSolicitud').classList.add('activo');
+    }
+
+    function cerrarModalSolicitud() {
+        document.getElementById('modalSolicitud').classList.remove('activo');
+    }
+
+    function enviarSolicitud(event) {
+        event.preventDefault();
+        const empresa = document.getElementById('nombreSolicitud').value.trim();
+        const email = document.getElementById('emailSolicitud').value.trim();
+        const telefono = document.getElementById('telefonoSolicitud').value.trim();
+        
+        const solicitud = {
+            fecha: new Date().toLocaleString(),
+            empresa: empresa,
+            email: email,
+            telefono: telefono,
+            prestamo: { ...prestamoActual }
+        };
+        
+        let solicitudes = JSON.parse(localStorage.getItem('solicitudesComerciales')) || [];
+        solicitudes.push(solicitud);
+        localStorage.setItem('solicitudesComerciales', JSON.stringify(solicitudes));
+        
+        alert('¡Gracias! Tu solicitud de préstamo comercial ha sido registrada. Un asesor te contactará pronto.');
+        cerrarModalSolicitud();
+        document.getElementById('formSolicitud').reset();
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('modalSolicitud');
+        if (event.target === modal) cerrarModalSolicitud();
+    }
+</script>
+</body>
+</html>
