@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco IPSY – Pymes</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #E1F0FF 0%, #F4F9FF 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .contenedor {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; flex-direction: column; gap: 1.5rem;
+        }
+        
+        /* Navbar */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1rem;
+            background: #FFFFFF; border-radius: 16px;
+            padding: 1rem 1.8rem;
+            box-shadow: 0 4px 12px rgba(0,76,151,0.08);
+        }
+        .logo {
+            font-size: 1.5rem; font-weight: 700; color: #004C97;
+            display: flex; align-items: center; gap: 0.5rem;
+            text-decoration: none;
+        }
+        .logo i { font-size: 1.8rem; }
+        .segmentos {
+            display: flex; gap: 1.2rem; font-weight: 500; color: #444C5E;
+        }
+        .segmentos a {
+            text-decoration: none; color: inherit;
+            transition: color 0.2s; font-size: 0.95rem;
+            padding: 0.5rem 0;
+        }
+        .segmentos a:hover { color: #004C97; }
+        .segmentos a.activo {
+            color: #004C97; font-weight: 700;
+            border-bottom: 2px solid #004C97;
+        }
+        .acciones-nav {
+            display: flex; gap: 0.8rem; align-items: center;
+        }
+        .btn-outline {
+            background: transparent; border: 1.5px solid #004C97; color: #004C97;
+            padding: 8px 18px; border-radius: 8px; font-weight: 600;
+            text-decoration: none; transition: all 0.2s; font-size: 0.9rem;
+        }
+        .btn-outline:hover { background: #004C97; color: #fff; }
+        .btn-solid {
+            background: #004C97; color: #fff; border: none;
+            padding: 8px 18px; border-radius: 8px; font-weight: 600;
+            text-decoration: none; transition: background 0.2s; font-size: 0.9rem;
+        }
+        .btn-solid:hover { background: #1677D8; }
+
+        /* Tarjetas */
+        .tarjeta {
+            background: #FFFFFF; border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,76,151,0.07), 0 4px 12px rgba(0,76,151,0.04);
+            padding: 2rem; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .tarjeta:hover { transform: translateY(-2px); box-shadow: 0 20px 45px rgba(0,76,151,0.12); }
+        
+        h2 {
+            font-size: 1.6rem; font-weight: 700; color: #292E38;
+            margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;
+        }
+        h2 i { color: #004C97; font-size: 1.4rem; }
+        h3 { font-size: 1.2rem; font-weight: 600; color: #292E38; margin-bottom: 0.8rem; }
+        p.descripcion { color: #444C5E; line-height: 1.6; margin-bottom: 1.2rem; }
+
+        /* Grid de productos */
+        .productos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem; margin-top: 1rem;
+        }
+        .producto-card {
+            background: #F8FBFF; border-radius: 16px; padding: 1.5rem;
+            border: 1px solid #E1F0FF; transition: all 0.2s;
+            text-decoration: none; color: inherit; display: block;
+        }
+        .producto-card:hover {
+            background: #EFF7FF; transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,76,151,0.1);
+        }
+        .producto-card i {
+            font-size: 2rem; color: #004C97; margin-bottom: 0.8rem;
+        }
+        .producto-card h3 {
+            font-size: 1.1rem; font-weight: 600; color: #292E38; margin-bottom: 0.5rem;
+        }
+        .producto-card p {
+            font-size: 0.85rem; color: #6F7583; line-height: 1.4;
+        }
+
+        /* Grid de servicios */
+        .servicios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem; margin-top: 1rem;
+        }
+        .servicio-item {
+            background: #F8FBFF; border-radius: 16px; padding: 1.5rem;
+            border: 1px solid #E1F0FF; transition: all 0.2s;
+        }
+        .servicio-item:hover { background: #EFF7FF; transform: translateY(-2px); }
+        .servicio-item i {
+            font-size: 1.8rem; color: #004C97; margin-bottom: 0.8rem;
+        }
+        .servicio-item h4 {
+            font-size: 1rem; font-weight: 600; color: #292E38; margin-bottom: 0.5rem;
+        }
+        .servicio-item ul {
+            list-style: none; margin-top: 0.5rem;
+        }
+        .servicio-item ul li {
+            padding: 0.3rem 0; font-size: 0.85rem; color: #444C5E;
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+        .servicio-item ul li i {
+            font-size: 0.6rem; color: #004C97;
+        }
+
+        /* Beneficios */
+        .beneficios-lista {
+            list-style: none; margin: 1.5rem 0;
+        }
+        .beneficios-lista li {
+            padding: 0.5rem 0; color: #444C5E;
+            display: flex; align-items: flex-start; gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+        .beneficios-lista i { color: #004C97; margin-top: 0.2rem; }
+
+        /* Botones */
+        .boton-primario {
+            display: inline-block; background: #004C97; color: #fff;
+            text-decoration: none; font-weight: 600; padding: 12px 28px;
+            border-radius: 12px; font-size: 1rem; transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(0,76,151,0.2); cursor: pointer;
+            border: none; text-align: center;
+        }
+        .boton-primario:hover { background: #1677D8; transform: translateY(-1px); }
+        .boton-primario i { margin-right: 8px; }
+
+        /* Modal */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.4);
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal.activo { display: flex; }
+        .modal-contenido {
+            background: white; border-radius: 20px; padding: 2rem;
+            max-width: 450px; width: 90%; text-align: left;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); position: relative;
+        }
+        .modal-contenido h3 { margin-bottom: 1rem; color: #004C97; }
+        .modal-contenido input, .modal-contenido select, .modal-contenido textarea {
+            width: 100%; padding: 10px; margin: 0.5rem 0 1rem;
+            border: 1px solid #D9E7F8; border-radius: 8px;
+            font-family: 'Inter', sans-serif; font-size: 0.9rem;
+        }
+        .cerrar-modal {
+            position: absolute; top: 0.8rem; right: 1rem;
+            background: none; border: none; font-size: 1.5rem;
+            color: #6F7583; cursor: pointer;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center; color: #6F7583; font-size: 0.85rem;
+            padding: 1rem 0; margin-top: 0.5rem;
+        }
+        .volver {
+            display: inline-block; color: #004C97; font-weight: 500;
+            text-decoration: none; transition: color 0.2s;
+        }
+        .volver:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; align-items: flex-start; }
+            .productos-grid, .servicios-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="contenedor">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <i class="fas fa-piggy-bank"></i> Banco IPSY
+        </a>
+        <div class="segmentos">
+            <a href="index.html">Personas</a>
+            <a href="pymes.html" class="activo">Pymes</a>
+            <a href="empresas.html">Empresas</a>
+        </div>
+        <div class="acciones-nav">
+            <a href="#" class="btn-outline">Contactar asesor</a>
+            <a href="#" class="btn-solid">Banca en Línea</a>
+        </div>
+    </nav>
+
+    <!-- Hero Pymes -->
+    <div class="tarjeta" style="text-align: center;">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; background: #E1F0FF; border-radius: 50%; font-size: 2.5rem; color: #004C97; margin-bottom: 1rem;">
+            <i class="fas fa-store-alt"></i>
+        </div>
+        <h2 style="justify-content: center; border-bottom: none;">Soluciones para tu Pyme</h2>
+        <p class="descripcion" style="margin-bottom: 1.5rem;">
+            Impulsá tu pequeño o mediano negocio con productos financieros flexibles y herramientas digitales hechas a tu medida.
+        </p>
+    </div>
+
+    <!-- Productos -->
+    <div class="tarjeta">
+        <h2><i class="fas fa-briefcase"></i> Productos</h2>
+        <div class="productos-grid">
+            <a href="#" class="producto-card">
+                <i class="fas fa-university"></i>
+                <h3>Cuentas</h3>
+                <p>Cuenta corriente empresarial, cuenta digital y cuenta planilla para tu negocio.</p>
+            </a>
+            <a href="tarjetas.html" class="producto-card">
+                <i class="fas fa-credit-card"></i>
+                <h3>Tarjetas</h3>
+                <p>Tarjetas de crédito y débito empresariales con beneficios exclusivos.</p>
+            </a>
+            <a href="seguros.html" class="producto-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Seguros</h3>
+                <p>Protegé tu negocio con seguros contra robos, incendios y responsabilidad civil.</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Medios de pago -->
+    <div class="tarjeta">
+        <h2><i class="fas fa-cash-register"></i> Medios de pago</h2>
+        <div class="servicios-grid">
+            <div class="servicio-item">
+                <i class="fas fa-credit-card"></i>
+                <h4>Puntos de venta (POS)</h4>
+                <ul>
+                    <li><i class="fas fa-circle"></i> POS tradicional</li>
+                    <li><i class="fas fa-circle"></i> MiPOS (app móvil)</li>
+                    <li><i class="fas fa-circle"></i> Hit (sin contacto)</li>
+                </ul>
+            </div>
+            <div class="servicio-item">
+                <i class="fas fa-globe"></i>
+                <h4>Ventas digitales</h4>
+                <ul>
+                    <li><i class="fas fa-circle"></i> Compra Click</li>
+                    <li><i class="fas fa-circle"></i> E-Commerce</li>
+                    <li><i class="fas fa-circle"></i> Xpress pago</li>
+                </ul>
+            </div>
+            <div class="servicio-item">
+                <i class="fas fa-tools"></i>
+                <h4>Herramientas de ventas</h4>
+                <ul>
+                    <li><i class="fas fa-circle"></i> Tasa Cero</li>
+                    <li><i class="fas fa-circle"></i> Mini Cuotas</li>
+                    <li><i class="fas fa-circle"></i> mipromo</li>
+                </ul>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <button class="boton-primario" onclick="abrirModal('medios_pago')">
+                <i class="fas fa-info-circle"></i> Quiero afiliar mi comercio
+            </button>
+        </div>
+    </div>
+
+    <!-- Financiamiento -->
+    <div class="tarjeta">
+        <h2><i class="fas fa-hand-holding-usd"></i> Financiamiento</h2>
+        <div class="productos-grid">
+            <div class="producto-card">
+                <i class="fas fa-sync-alt"></i>
+                <h3>Capital de trabajo</h3>
+                <p>Líneas de crédito y sobregiros para mantener la liquidez de tu negocio.</p>
+            </div>
+            <div class="producto-card">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <h3>Factoring</h3>
+                <p>Adelantá el cobro de tus facturas y obtené efectivo inmediato.</p>
+            </div>
+            <div class="producto-card">
+                <i class="fas fa-truck"></i>
+                <h3>Leasing</h3>
+                <p>Adquirí vehículos, maquinaria o equipos pagando cómodas cuotas.</p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <a href="calculadora.html" class="boton-primario">
+                <i class="fas fa-calculator"></i> Simulá tu préstamo
+            </a>
+        </div>
+    </div>
+
+    <!-- Beneficios -->
+    <div class="tarjeta">
+        <h2><i class="fas fa-star"></i> Beneficios exclusivos para Pymes</h2>
+        <ul class="beneficios-lista">
+            <li><i class="fas fa-check-circle"></i> <strong>Rapibac:</strong> Generá tráfico de clientes a tu negocio.</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Pyme Store:</strong> Creá tu tienda en línea gratis.</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Asistencia Pyme:</strong> Asesoría contable y legal telefónica.</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Capacitaciones:</strong> Cursos gratuitos de finanzas y marketing digital.</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Tarifas preferenciales:</strong> Comisiones reducidas en transacciones.</li>
+        </ul>
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <button class="boton-primario" onclick="abrirModal('asesoria')">
+                <i class="fas fa-headset"></i> Solicitar asesoría personalizada
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <a href="index.html" class="volver"><i class="fas fa-arrow-left"></i> Volver al inicio</a>
+        <p style="margin-top: 0.5rem;">© 2025 Banco IPSY — Todos los derechos reservados</p>
+    </div>
+</div>
+
+<!-- Modal genérico -->
+<div class="modal" id="modalPymes">
+    <div class="modal-contenido">
+        <button class="cerrar-modal" onclick="cerrarModal()">&times;</button>
+        <h3 id="modalTitulo">Solicitar información</h3>
+        <form id="formPymes" onsubmit="enviarSolicitud(event)">
+            <label for="nombreModal">Nombre completo</label>
+            <input type="text" id="nombreModal" required>
+            <label for="empresaModal">Nombre de la empresa</label>
+            <input type="text" id="empresaModal">
+            <label for="emailModal">Correo electrónico</label>
+            <input type="email" id="emailModal" required>
+            <label for="telefonoModal">Teléfono</label>
+            <input type="tel" id="telefonoModal">
+            <input type="hidden" id="tipoSolicitud" value="">
+            <button type="submit" class="boton-primario" style="width: 100%; margin-top: 0.5rem;">
+                <i class="fas fa-paper-plane"></i> Enviar
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function abrirModal(tipo) {
+        const titulo = tipo === 'medios_pago' 
+            ? 'Solicitar afiliación de comercio' 
+            : 'Solicitar asesoría personalizada';
+        document.getElementById('modalTitulo').textContent = titulo;
+        document.getElementById('tipoSolicitud').value = tipo;
+        document.getElementById('modalPymes').classList.add('activo');
+    }
+    
+    function cerrarModal() {
+        document.getElementById('modalPymes').classList.remove('activo');
+    }
+    
+    function enviarSolicitud(event) {
+        event.preventDefault();
+        const nombre = document.getElementById('nombreModal').value.trim();
+        const empresa = document.getElementById('empresaModal').value.trim();
+        const email = document.getElementById('emailModal').value.trim();
+        const telefono = document.getElementById('telefonoModal').value.trim();
+        const tipo = document.getElementById('tipoSolicitud').value;
+        
+        const solicitud = {
+            fecha: new Date().toLocaleString(),
+            tipo: tipo,
+            nombre: nombre,
+            empresa: empresa,
+            email: email,
+            telefono: telefono
+        };
+        
+        let pymeSolicitudes = JSON.parse(localStorage.getItem('solicitudesPymes')) || [];
+        pymeSolicitudes.push(solicitud);
+        localStorage.setItem('solicitudesPymes', JSON.stringify(pymeSolicitudes));
+        
+        alert('¡Gracias, ' + nombre + '! Tu solicitud ha sido registrada. Un asesor te contactará pronto.');
+        cerrarModal();
+        document.getElementById('formPymes').reset();
+    }
+    
+    window.onclick = function(event) {
+        const modal = document.getElementById('modalPymes');
+        if (event.target === modal) cerrarModal();
+    }
+</script>
+</body>
+</html>
