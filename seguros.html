@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco Confiable – Seguros</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #E1F0FF 0%, #F4F9FF 100%);
+            min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            padding: 2rem 1.5rem;
+        }
+        .contenedor {
+            max-width: 1100px; width: 100%;
+        }
+        .encabezado {
+            text-align: center; margin-bottom: 2.5rem;
+        }
+        .encabezado h1 {
+            font-size: 2.2rem; font-weight: 700; color: #292E38; margin-bottom: 0.5rem;
+        }
+        .encabezado p {
+            color: #6F7583; font-size: 1.1rem;
+        }
+        .seguros-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .tarjeta-seguro {
+            background: #FFFFFF; border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,76,151,0.07);
+            padding: 2rem 1.8rem; text-align: center;
+            transition: all 0.2s; display: flex; flex-direction: column;
+        }
+        .tarjeta-seguro:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 45px rgba(0,76,151,0.12);
+        }
+        .icono-seguro {
+            font-size: 2.5rem; color: #004C97; margin-bottom: 1rem;
+        }
+        .tarjeta-seguro h2 {
+            font-size: 1.5rem; font-weight: 600; color: #292E38; margin-bottom: 0.8rem;
+        }
+        .suma {
+            background: #F0F7FF; border-radius: 12px;
+            padding: 0.8rem; margin: 0.8rem 0;
+            font-weight: 600; color: #004C97; font-size: 1.1rem;
+        }
+        .coberturas {
+            text-align: left; margin: 1rem 0; flex: 1;
+        }
+        .coberturas h3 {
+            font-size: 1rem; font-weight: 600; color: #292E38; margin-bottom: 0.5rem;
+        }
+        .coberturas ul {
+            list-style: none; margin-bottom: 1rem;
+        }
+        .coberturas li {
+            padding: 0.3rem 0; color: #444C5E; font-size: 0.9rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .coberturas li i {
+            color: #004C97; font-size: 0.8rem;
+        }
+        .boton-cotizar {
+            display: inline-block; background: #004C97; color: #fff;
+            padding: 12px 28px; border-radius: 12px; font-weight: 600;
+            text-decoration: none; transition: all 0.2s; border: none;
+            cursor: pointer; font-size: 1rem; margin-top: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0,76,151,0.2);
+        }
+        .boton-cotizar:hover { background: #1677D8; transform: translateY(-1px); }
+        .boton-cotizar i { margin-right: 8px; }
+
+        /* Modal */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.4);
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal.activo { display: flex; }
+        .modal-contenido {
+            background: white; border-radius: 20px; padding: 2rem;
+            max-width: 400px; width: 90%; text-align: left;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        .modal-contenido h3 { margin-bottom: 1rem; color: #004C97; }
+        .modal-contenido input, .modal-contenido select {
+            width: 100%; padding: 10px; margin: 0.5rem 0 1rem;
+            border: 1px solid #D9E7F8; border-radius: 8px; font-family: 'Inter', sans-serif;
+        }
+        .modal-contenido .boton-cotizar { width: 100%; }
+        .cerrar-modal {
+            background: none; border: none; float: right; font-size: 1.5rem;
+            color: #6F7583; cursor: pointer;
+        }
+        .volver {
+            display: inline-block; margin-top: 2rem; color: #004C97;
+            font-weight: 500; text-decoration: none;
+        }
+        .volver:hover { text-decoration: underline; }
+        @media (max-width: 600px) {
+            .encabezado h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="contenedor">
+    <div class="encabezado">
+        <h1>Protegé lo que más importa</h1>
+        <p>Conocé nuestros seguros diseñados para cuidarte a vos y a tu familia.</p>
+    </div>
+
+    <div class="seguros-grid">
+        <!-- Seguro de Vida -->
+        <div class="tarjeta-seguro">
+            <div class="icono-seguro"><i class="fas fa-heartbeat"></i></div>
+            <h2>Seguro de Vida</h2>
+            <div class="suma">Suma asegurada hasta $100,000</div>
+            <div class="coberturas">
+                <h3>Coberturas incluidas:</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Fallecimiento por cualquier causa</li>
+                    <li><i class="fas fa-check-circle"></i> Incapacidad total y permanente</li>
+                    <li><i class="fas fa-check-circle"></i> Asistencia funeraria</li>
+                    <li><i class="fas fa-check-circle"></i> Doble indemnización por accidente</li>
+                </ul>
+            </div>
+            <button class="boton-cotizar" onclick="abrirModal('Vida')">
+                <i class="fas fa-file-invoice"></i> Cotizar
+            </button>
+        </div>
+
+        <!-- Seguro de Salud -->
+        <div class="tarjeta-seguro">
+            <div class="icono-seguro"><i class="fas fa-stethoscope"></i></div>
+            <h2>Seguro de Salud</h2>
+            <div class="suma">Suma asegurada hasta $50,000</div>
+            <div class="coberturas">
+                <h3>Coberturas incluidas:</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Consultas médicas y especialistas</li>
+                    <li><i class="fas fa-check-circle"></i> Exámenes de laboratorio</li>
+                    <li><i class="fas fa-check-circle"></i> Hospitalización y cirugías</li>
+                    <li><i class="fas fa-check-circle"></i> Medicamentos recetados</li>
+                </ul>
+            </div>
+            <button class="boton-cotizar" onclick="abrirModal('Salud')">
+                <i class="fas fa-file-invoice"></i> Cotizar
+            </button>
+        </div>
+
+        <!-- Seguro contra Incendio -->
+        <div class="tarjeta-seguro">
+            <div class="icono-seguro"><i class="fas fa-fire"></i></div>
+            <h2>Seguro contra Incendio</h2>
+            <div class="suma">Suma asegurada hasta $80,000</div>
+            <div class="coberturas">
+                <h3>Coberturas incluidas:</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Daños por incendio y explosión</li>
+                    <li><i class="fas fa-check-circle"></i> Daños por humo y calor</li>
+                    <li><i class="fas fa-check-circle"></i> Gastos de demolición y remoción</li>
+                    <li><i class="fas fa-check-circle"></i> Responsabilidad civil por incendio</li>
+                </ul>
+            </div>
+            <button class="boton-cotizar" onclick="abrirModal('Incendio')">
+                <i class="fas fa-file-invoice"></i> Cotizar
+            </button>
+        </div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="volver"><i class="fas fa-arrow-left"></i> Volver al inicio</a>
+    </div>
+</div>
+
+<!-- Modal de cotización -->
+<div class="modal" id="modalCotizar">
+    <div class="modal-contenido">
+        <button class="cerrar-modal" onclick="cerrarModal()">&times;</button>
+        <h3>Solicitar cotización – <span id="tipoSeguro"></span></h3>
+        <form id="formCotizar" onsubmit="enviarCotizacion(event)">
+            <label for="nombre">Nombre completo</label>
+            <input type="text" id="nombre" required>
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" required>
+            <label for="telefono">Teléfono</label>
+            <input type="tel" id="telefono">
+            <button type="submit" class="boton-cotizar">
+                <i class="fas fa-paper-plane"></i> Enviar solicitud
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function abrirModal(tipo) {
+        document.getElementById('tipoSeguro').textContent = tipo;
+        document.getElementById('modalCotizar').classList.add('activo');
+    }
+    function cerrarModal() {
+        document.getElementById('modalCotizar').classList.remove('activo');
+    }
+    function enviarCotizacion(event) {
+        event.preventDefault();
+        alert('¡Gracias! Hemos recibido tu solicitud de cotización para el seguro. Un asesor te contactará pronto.');
+        cerrarModal();
+        document.getElementById('formCotizar').reset();
+    }
+    // Cerrar modal al hacer clic fuera del contenido
+    window.onclick = function(event) {
+        const modal = document.getElementById('modalCotizar');
+        if (event.target === modal) {
+            cerrarModal();
+        }
+    }
+</script>
+</body>
+</html>

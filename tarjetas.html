@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco Confiable – Tarjetas</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #E1F0FF 0%, #F4F9FF 100%);
+            min-height: 100vh;
+            display: flex; justify-content: center; padding: 2rem 1.5rem;
+        }
+        .contenedor {
+            max-width: 1200px; width: 100%;
+        }
+        .encabezado {
+            text-align: center; margin-bottom: 2.5rem;
+        }
+        .encabezado h1 {
+            font-size: 2.2rem; font-weight: 700; color: #292E38; margin-bottom: 0.5rem;
+        }
+        .encabezado p {
+            color: #6F7583; font-size: 1.1rem;
+        }
+
+        /* Menú de categorías principales */
+        .categorias-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem; margin-bottom: 2rem;
+        }
+        .categoria-card {
+            background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,76,151,0.06);
+            padding: 1.5rem; text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .categoria-card:hover {
+            transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0,76,151,0.12);
+        }
+        .categoria-icon {
+            font-size: 2rem; color: #004C97; margin-bottom: 0.8rem;
+        }
+        .categoria-card h2 {
+            font-size: 1.3rem; font-weight: 600; color: #292E38; margin-bottom: 0.8rem;
+        }
+        .categoria-card ul {
+            list-style: none; text-align: left; margin-bottom: 1rem;
+        }
+        .categoria-card ul li {
+            padding: 0.3rem 0; font-size: 0.9rem; color: #444C5E;
+        }
+        .categoria-card ul li i {
+            color: #004C97; margin-right: 6px; font-size: 0.7rem;
+        }
+        .ver-todas {
+            color: #004C97; font-weight: 500; text-decoration: none;
+            font-size: 0.9rem; transition: color 0.2s;
+        }
+        .ver-todas:hover { text-decoration: underline; }
+
+        /* Filtro rápido */
+        .filtro {
+            background: white; border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,76,151,0.06);
+            padding: 1rem 1.5rem; display: flex; flex-wrap: wrap;
+            align-items: center; gap: 1.5rem; margin-bottom: 2rem;
+        }
+        .filtro span {
+            font-weight: 600; color: #292E38; font-size: 0.95rem;
+        }
+        .filtro select {
+            padding: 0.5rem 1rem; border-radius: 8px;
+            border: 1px solid #D9E7F8; font-family: 'Inter', sans-serif;
+        }
+
+        /* Listado de tarjetas */
+        .tarjetas-listado { display: flex; flex-direction: column; gap: 2rem; }
+        .seccion-tarjetas { }
+        .seccion-tarjetas h2 {
+            font-size: 1.5rem; font-weight: 600; color: #292E38;
+            margin-bottom: 1rem; border-bottom: 2px solid #E1F0FF; padding-bottom: 0.5rem;
+        }
+        .tarjetas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .tarjeta-item {
+            background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,76,151,0.06);
+            padding: 1.5rem; display: flex; flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .tarjeta-item:hover {
+            transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0,76,151,0.12);
+        }
+        .tarjeta-img {
+            width: 100%; height: 120px; background: #F0F4FA;
+            border-radius: 12px; margin-bottom: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; color: #004C97;
+        }
+        .tarjeta-item h3 {
+            font-size: 1.1rem; font-weight: 600; color: #292E38; margin-bottom: 0.5rem;
+        }
+        .tarjeta-item p {
+            font-size: 0.85rem; color: #6F7583; margin-bottom: 1rem; flex: 1;
+        }
+        .tarjeta-botones {
+            display: flex; gap: 0.5rem; justify-content: center;
+        }
+        .btn-solicitar {
+            background: #004C97; color: white; border: none;
+            padding: 8px 20px; border-radius: 8px; font-weight: 600;
+            cursor: pointer; transition: background 0.2s;
+            text-decoration: none; font-size: 0.9rem;
+        }
+        .btn-solicitar:hover { background: #1677D8; }
+        .btn-ver-mas {
+            background: transparent; border: 1px solid #004C97; color: #004C97;
+            padding: 8px 20px; border-radius: 8px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; font-size: 0.9rem;
+        }
+        .btn-ver-mas:hover { background: #E1F0FF; }
+
+        .volver {
+            display: inline-block; margin-top: 2rem; color: #004C97;
+            font-weight: 500; text-decoration: none;
+        }
+        .volver:hover { text-decoration: underline; }
+        @media (max-width: 600px) {
+            .encabezado h1 { font-size: 1.8rem; }
+            .categorias-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="contenedor">
+    <div class="encabezado">
+        <h1>Tarjetas Banco Confiable</h1>
+        <p>Encontrá la tarjeta perfecta para tu estilo de vida.</p>
+    </div>
+
+    <!-- Categorías principales (como mega menú) -->
+    <div class="categorias-grid">
+        <div class="categoria-card">
+            <div class="categoria-icon"><i class="fas fa-credit-card"></i></div>
+            <h2>Débito</h2>
+            <ul>
+                <li><i class="fas fa-circle"></i>Visa La Roja Clásica</li>
+                <li><i class="fas fa-circle"></i>Visa Platinum débito</li>
+                <li><i class="fas fa-circle"></i>La Roja Clave</li>
+                <li><i class="fas fa-circle"></i>Mastercard La Roja</li>
+            </ul>
+            <a href="#debito" class="ver-todas">Ver todas las tarjetas <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="categoria-card">
+            <div class="categoria-icon"><i class="fas fa-shopping-cart"></i></div>
+            <h2>Supermercados y clubes</h2>
+            <ul>
+                <li><i class="fas fa-circle"></i>SmartCash Clásica Mastercard</li>
+                <li><i class="fas fa-circle"></i>SmartCash Clásica American Express</li>
+                <li><i class="fas fa-circle"></i>PriceSmart</li>
+                <li><i class="fas fa-circle"></i>Panafoto</li>
+            </ul>
+            <a href="#supermercados" class="ver-todas">Ver todas las tarjetas <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="categoria-card">
+            <div class="categoria-icon"><i class="fas fa-plane"></i></div>
+            <h2>Viajes</h2>
+            <ul>
+                <li><i class="fas fa-circle"></i>ConnectMiles Black Amex</li>
+                <li><i class="fas fa-circle"></i>AAdvantage Platinum Mastercard</li>
+                <li><i class="fas fa-circle"></i>LifeMiles Platinum Amex</li>
+            </ul>
+            <a href="#viajes" class="ver-todas">Ver todas las tarjetas <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="categoria-card">
+            <div class="categoria-icon"><i class="fas fa-gem"></i></div>
+            <h2>Estilo de vida</h2>
+            <ul>
+                <li><i class="fas fa-circle"></i>The Platinum Card</li>
+                <li><i class="fas fa-circle"></i>Destiny Black Mastercard</li>
+                <li><i class="fas fa-circle"></i>Blue Centurion Amex</li>
+            </ul>
+            <a href="#estilo-vida" class="ver-todas">Ver todas las tarjetas <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+
+    <!-- Filtro rápido (simula el segundo pantallazo) -->
+    <div class="filtro">
+        <span><i class="fas fa-filter"></i> Filtrar por:</span>
+        <select id="filtroCategoria" onchange="filtrarTarjetas()">
+            <option value="todas">Todas las categorías</option>
+            <option value="debito">Débito</option>
+            <option value="supermercados">Supermercados y clubes</option>
+            <option value="viajes">Viajes</option>
+            <option value="estilo">Estilo de vida</option>
+        </select>
+        <select id="filtroMarca" onchange="filtrarTarjetas()">
+            <option value="todas">Todas las marcas</option>
+            <option value="visa">Visa</option>
+            <option value="mastercard">Mastercard</option>
+            <option value="amex">American Express</option>
+        </select>
+    </div>
+
+    <!-- Listado de tarjetas por categoría -->
+    <div class="tarjetas-listado" id="listadoTarjetas">
+        <!-- Débito -->
+        <div class="seccion-tarjetas" data-categoria="debito" data-marca="todas visa mastercard">
+            <h2 id="debito">Débito</h2>
+            <div class="tarjetas-grid">
+                <div class="tarjeta-item" data-marca="mastercard">
+                    <div class="tarjeta-img"><i class="fab fa-cc-mastercard"></i></div>
+                    <h3>Mastercard La Roja</h3>
+                    <p>Accede a tus fondos en la red de ATM local e internacional y realiza tus compras en más de 5,000 comercios afiliados.</p>
+                    <div class="tarjeta-botones">
+                        <button class="btn-solicitar" onclick="solicitar('Mastercard La Roja')">Solicitar</button>
+                        <button class="btn-ver-mas">Ver más</button>
+                    </div>
+                </div>
+                <div class="tarjeta-item" data-marca="mastercard">
+                    <div class="tarjeta-img"><i class="fab fa-cc-mastercard"></i></div>
+                    <h3>Mastercard Black débito</h3>
+                    <p>Accede a tus ahorros dentro o fuera del país y realiza tus compras en comercios afiliados. Incluye seguros Mastercard.</p>
+                    <div class="tarjeta-botones">
+                        <button class="btn-solicitar" onclick="solicitar('Mastercard Black')">Solicitar</button>
+                        <button class="btn-ver-mas">Ver más</button>
+                    </div>
+                </div>
+                <div class="tarjeta-item" data-marca="visa">
+                    <div class="tarjeta-img"><i class="fab fa-cc-visa"></i></div>
+                    <h3>Visa La Roja Clásica</h3>
+                    <p>Tu tarjeta de débito clásica con acceso a miles de cajeros y compras seguras.</p>
+                    <div class="tarjeta-botones">
+                        <button class="btn-solicitar" onclick="solicitar('Visa La Roja')">Solicitar</button>
+                        <button class="btn-ver-mas">Ver más</button>
+                    </div>
+                </div>
+                <div class="tarjeta-item" data-marca="visa">
+                    <div class="tarjeta-img"><i class="fab fa-cc-visa"></i></div>
+                    <h3>Visa Platinum débito</h3>
+                    <p>Beneficios exclusivos, acceso a salas VIP en aeropuertos y protección de compras.</p>
+                    <div class="tarjeta-botones">
+                        <button class="btn-solicitar" onclick="solicitar('Visa Platinum')">Solicitar</button>
+                        <button class="btn-ver-mas">Ver más</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Supermercados y clubes -->
+        <div class="seccion-tarjetas" data-categoria="supermercados" data-marca="todas mastercard amex">
+            <h2 id="supermercados">Supermercados y clubes</h2>
+            <div class="tarjetas-grid">
+                <div class="tarjeta-item" data-marca="mastercard">
+                    <div class="tarjeta-img"><i class="fab fa-cc-mastercard"></i></div>
+                    <h3>SmartCash Clásica Mastercard</h3>
+                    <p>Acumula cashback en tus compras de supermercado y combustible.</p>
+                    <div class="tarjeta-botones">
+                        <button class="btn-solicitar" onclick="solicitar('SmartCash Mastercard')">Solicitar</button>
+                        <button class="btn-ver-mas">Ver más</button>
+                    </div>
+                </div>
+                <div class="tarjeta-item" data-marca="amex">
+                    <div class="tarjeta-img"><i class="fab fa-cc-amex"></i></div>
+                    <h3>SmartCash Clásica American Express</h3>
+                    <p>Cashback y promociones exclusivas en comercios afiliados.</p>
+                    <div class="tarjeta-botones">
+                        <button class="btn-solicitar" onclick="solicitar('SmartCash Amex')">Solicitar</button>
+                        <button class="btn-ver-mas">Ver más</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Viajes -->
+        <div class="seccion-tarjetas" data-categoria="viajes" data-marca="todas mastercard amex">
+            <h2 id="viajes">Viajes</h2>
+            <div class="tarjetas-grid">
+                <div class="tarjeta-item" data-marca="amex">
+                    <div class="tarjeta-img"><i class="fab fa-cc-amex"></i></div>
+                    <h3>ConnectMiles Black American Express</h3>
+                    <p>Acumula millas por cada dólar y accede a salas VIP en aeropuertos.</p>
+                    <div class="tarjeta-botones">
+                        <button class="btn-solicitar" onclick="solicitar('ConnectMiles Black')">Solicitar</button>
+                        <button class="btn-ver-mas">Ver más</button>
+                    </div>
+                </div>
+                <div class="tarjeta-item" data-marca="mastercard">
+                    <div class="tarjeta-img"><i class="fab fa-cc-mastercard"></i></div>
+                    <h3>AAdvantage Platinum Mastercard</h3>
+                    <p>Gana millas AAdvantage y disfruta de equipaje prioritario.</p>
+                    <div class="tarjeta-botones">
+                        <button class="btn-solicitar" onclick="solicitar('AAdvantage Platinum')">Solicitar</button>
+                        <button class="btn-ver-mas">Ver más</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estilo de vida -->
+        <div class="seccion-tarjetas" data-categoria="estilo" data-marca="todas amex mastercard">
+            <h2 id="estilo-vida">Estilo de vida</h2>
+            <div class="tarjetas-grid">
+                <div class="tarjeta-item" data-marca="amex">
+                    <div class="tarjeta-img"><i class="fab fa-cc-amex"></i></div>
+                    <h3>The Platinum Card</h3>
+                    <p>Acceso ilimitado a salas VIP, seguro de viaje premium y servicio de conserjería.</p>
+                    <div class="tarjeta-botones">
+                        <button class="btn-solicitar" onclick="solicitar('The Platinum Card')">Solicitar</button>
+                        <button class="btn-ver-mas">Ver más</button>
+                    </div>
+                </div>
+                <div class="tarjeta-item" data-marca="mastercard">
+                    <div class="tarjeta-img"><i class="fab fa-cc-mastercard"></i></div>
+                    <h3>Destiny Black Mastercard</h3>
+                    <p>Beneficios de lujo, protección de compras y asistencia global.</p>
+                    <div class="tarjeta-botones">
+                        <button class="btn-solicitar" onclick="solicitar('Destiny Black')">Solicitar</button>
+                        <button class="btn-ver-mas">Ver más</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="volver"><i class="fas fa-arrow-left"></i> Volver al inicio</a>
+    </div>
+</div>
+
+<script>
+    function solicitar(nombre) {
+        alert("Has solicitado la tarjeta: " + nombre + ".\nUn asesor te contactará pronto.");
+    }
+    function filtrarTarjetas() {
+        const cat = document.getElementById('filtroCategoria').value;
+        const marca = document.getElementById('filtroMarca').value;
+        const secciones = document.querySelectorAll('.seccion-tarjetas');
+        secciones.forEach(seccion => {
+            const categoria = seccion.dataset.categoria;
+            const marcasValidas = seccion.dataset.marca.split(' ');
+            let mostrarCategoria = (cat === 'todas' || cat === categoria);
+            if (!mostrarCategoria) {
+                seccion.style.display = 'none';
+                return;
+            }
+            seccion.style.display = 'block';
+            const tarjetas = seccion.querySelectorAll('.tarjeta-item');
+            tarjetas.forEach(tarjeta => {
+                const marcaTarjeta = tarjeta.dataset.marca;
+                let mostrarTarjeta = (marca === 'todas' || marca === marcaTarjeta);
+                tarjeta.style.display = mostrarTarjeta ? 'flex' : 'none';
+            });
+        });
+    }
+</script>
+</body>
+</html>

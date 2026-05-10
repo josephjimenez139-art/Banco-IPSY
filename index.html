@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco IPSY – Inicio</title>
+
+    <!-- Tipografía Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #E1F0FF 0%, #F4F9FF 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .contenedor {
+            max-width: 960px; margin: 0 auto;
+            display: flex; flex-direction: column; gap: 1.5rem;
+        }
+        /* Barra superior de navegación */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1rem;
+            background: #FFFFFF; border-radius: 16px;
+            padding: 1rem 1.8rem;
+            box-shadow: 0 4px 12px rgba(0,76,151,0.08);
+        }
+        .logo {
+            font-size: 1.5rem; font-weight: 700; color: #004C97;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .logo i { font-size: 1.8rem; }
+        .segmentos {
+            display: flex; gap: 1.2rem; font-weight: 500; color: #444C5E;
+        }
+        .segmentos a {
+            text-decoration: none; color: inherit;
+            transition: color 0.2s; font-size: 0.95rem;
+        }
+        .segmentos a:hover { color: #004C97; }
+        .acciones-nav {
+            display: flex; gap: 0.8rem; align-items: center;
+        }
+        .btn-outline {
+            background: transparent; border: 1.5px solid #004C97; color: #004C97;
+            padding: 8px 18px; border-radius: 8px; font-weight: 600;
+            text-decoration: none; transition: all 0.2s; font-size: 0.9rem;
+        }
+        .btn-outline:hover { background: #004C97; color: #fff; }
+        .btn-solid {
+            background: #004C97; color: #fff; border: none;
+            padding: 8px 18px; border-radius: 8px; font-weight: 600;
+            text-decoration: none; transition: background 0.2s; font-size: 0.9rem;
+        }
+        .btn-solid:hover { background: #1677D8; }
+
+        /* Tarjeta general */
+        .tarjeta {
+            background: #FFFFFF; border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,76,151,0.07), 0 4px 12px rgba(0,76,151,0.04);
+            padding: 2rem 2rem; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .tarjeta:hover { transform: translateY(-2px); box-shadow: 0 20px 45px rgba(0,76,151,0.12); }
+
+        h2 { font-size: 1.6rem; font-weight: 700; color: #292E38; margin-bottom: 0.8rem; }
+        h3 { font-size: 1.2rem; font-weight: 600; color: #292E38; margin-bottom: 0.5rem; }
+        p.descripcion { color: #444C5E; line-height: 1.6; margin-bottom: 1.2rem; }
+
+        .boton-primario {
+            display: inline-block; background: #004C97; color: #fff; text-decoration: none;
+            font-weight: 600; padding: 12px 28px; border-radius: 12px; border: none;
+            font-size: 1rem; transition: all 0.2s; box-shadow: 0 4px 14px rgba(0,76,151,0.2);
+            cursor: pointer;
+        }
+        .boton-primario:hover { background: #1677D8; transform: translateY(-1px); }
+        .boton-primario i { margin-right: 8px; }
+
+        /* Sección de servicios / Área de negocios simplificada */
+        .servicios-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 1rem; margin-top: 1.5rem;
+        }
+        .servicio-item {
+            background: #F8FBFF; border-radius: 12px; padding: 1rem;
+            text-align: center; border: 1px solid #E1F0FF;
+            transition: background 0.2s; text-decoration: none; color: #292E38;
+        }
+        .servicio-item:hover { background: #E1F0FF; }
+        .servicio-item i { font-size: 1.8rem; color: #004C97; margin-bottom: 0.5rem; }
+        .servicio-item span { display: block; font-weight: 500; font-size: 0.9rem; }
+
+        /* Sección destacada (estilo cuenta joven) */
+        .destacado-contenido {
+            display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center;
+        }
+        .destacado-texto { flex: 1; min-width: 250px; }
+        .destacado-imagen {
+            flex: 0 0 180px; text-align: center;
+            font-size: 6rem; color: #004C97; opacity: 0.9;
+        }
+        .beneficios-lista { list-style: none; margin-top: 1rem; }
+        .beneficios-lista li {
+            padding: 0.4rem 0; color: #444C5E;
+            display: flex; align-items: flex-start; gap: 0.5rem;
+        }
+        .beneficios-lista i { color: #004C97; margin-top: 0.2rem; }
+
+        /* Footer */
+        .footer {
+            text-align: center; color: #6F7583; font-size: 0.85rem;
+            padding: 1rem 0; margin-top: 0.5rem;
+        }
+        @media (max-width: 600px) {
+            .navbar { flex-direction: column; align-items: flex-start; }
+            .destacado-contenido { flex-direction: column; }
+            .destacado-imagen { font-size: 4rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="contenedor">
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-piggy-bank"></i> Banco IPSY
+        </div>
+        <div class="segmentos">
+            <a href="#">Personas</a>
+            <a href="#">Pymes</a>
+            <a href="#">Empresas</a>
+        </div>
+        <div class="acciones-nav">
+            <a href="#" class="btn-outline">Abrir cuenta</a>
+            <a href="#" class="btn-solid">Banca en Línea</a>
+        </div>
+    </nav>
+
+    <!-- Área de servicios / Negocios (simplificada) -->
+    <div class="tarjeta">
+        <h2>Área de productos</h2>
+        <div class="servicios-grid">
+            <a href="tarjetas.html" class="servicio-item">
+                <i class="fas fa-credit-card"></i>
+                <span>Tarjetas</span>
+            </a>
+            <a href="calculador.html" class="servicio-item">
+                <i class="fas fa-hand-holding-usd"></i>
+                <span>Préstamos</span>
+            </a>
+            <a href="#" class="servicio-item">
+                <i class="fas fa-piggy-bank"></i>
+                <span>Ahorro</span>
+            </a>
+            <a href="seguros.html" class="servicio-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>Seguros</span>
+            </a>
+            <a href="#" class="servicio-item">
+                <i class="fas fa-globe"></i>
+                <span>Inversiones</span>
+            </a>
+            <a href="#" class="servicio-item">
+                <i class="fas fa-mobile-alt"></i>
+                <span>Banca Móvil</span>
+            </a>
+            <a href="#" class="servicio-item">
+                <i class="fas fa-building"></i>
+                <span>Sucursales</span>
+            </a>
+            <a href="#" class="servicio-item">
+                <i class="fas fa-tag"></i>
+                <span>Promociones</span>
+            </a>
+        </div>
+        <div style="text-align: right; margin-top: 1rem;">
+            <a href="#" style="color: #004C97; font-weight: 500; text-decoration: none;">Ver todos <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+
+    <!-- Sección destacada: Simulador de préstamos (análogo a Cuenta Joven) -->
+    <div class="tarjeta">
+        <div class="destacado-contenido">
+            <div class="destacado-texto">
+                <h2>¡Simula tu préstamo comercial en segundos!</h2>
+                <p class="descripcion">
+                    Conoce cuánto pagarías por ese crédito que necesitas.  
+                    Sin trámites, sin compromiso, desde cualquier dispositivo.
+                </p>
+                <ul class="beneficios-lista">
+                    <li><i class="fas fa-check-circle"></i> Cuota mensual fija y clara.</li>
+                    <li><i class="fas fa-check-circle"></i> Cálculo al instante con tabla de amortización.</li>
+                    <li><i class="fas fa-check-circle"></i> 100% digital, solo unos clics.</li>
+                </ul>
+                <a href="calculador.html" class="boton-primario" style="margin-top: 1rem;">
+                    <i class="fas fa-calculator"></i> Calcular ahora
+                </a>
+            </div>
+            <div class="destacado-imagen">
+                <i class="fas fa-coins"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Promociones o enlaces rápidos -->
+    <div class="tarjeta" style="text-align: center;">
+        <h3>¿Necesitas ayuda?</h3>
+        <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem;">
+            <a href="#" class="btn-outline"><i class="fas fa-question-circle"></i> Preguntas frecuentes</a>
+            <a href="#" class="btn-outline"><i class="fas fa-headset"></i> Contacto</a>
+            <a href="#" class="btn-outline"><i class="fas fa-file-alt"></i> Tarifas</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2025 Banco YPSI — Todos los derechos reservados
+    </div>
+</div>
+</body>
+</html>

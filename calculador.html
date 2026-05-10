@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco IPSY – Simulador de Préstamos</title>
+
+    <!-- Tipografía profesional Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #E1F0FF 0%, #F4F9FF 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .pantalla {
+            background: #FFFFFF;
+            border-radius: 24px;
+            box-shadow: 0 20px 45px rgba(0, 76, 151, 0.08), 0 4px 12px rgba(0, 76, 151, 0.04);
+            max-width: 550px;
+            width: 100%;
+            padding: 2.5rem 2.2rem;
+            text-align: center;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .pantalla:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 28px 55px rgba(0, 76, 151, 0.12), 0 6px 18px rgba(0, 76, 151, 0.06);
+        }
+
+        .icono-banco {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background: #E1F0FF;
+            border-radius: 50%;
+            font-size: 2.5rem;
+            color: #004C97;
+            margin-bottom: 1.2rem;
+        }
+
+        h1 {
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: #292E38;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.3px;
+        }
+
+        .subtitulo {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6F7583;
+            margin-bottom: 2rem;
+        }
+
+        /* Formulario */
+        .formulario {
+            text-align: left;
+            margin-bottom: 1.8rem;
+        }
+
+        .campo {
+            margin-bottom: 1.2rem;
+        }
+
+        .campo label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #292E38;
+            margin-bottom: 0.4rem;
+        }
+
+        .campo input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #D9E7F8;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #FBFDFF;
+        }
+
+        .campo input:focus {
+            outline: none;
+            border-color: #004C97;
+            box-shadow: 0 0 0 3px rgba(0, 76, 151, 0.12);
+        }
+
+        /* Botones */
+        .boton-primario {
+            display: inline-block;
+            background-color: #004C97;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 13px 32px;
+            border-radius: 12px;
+            border: 2px solid #004C97;
+            box-shadow: 0 4px 14px rgba(0, 76, 151, 0.18);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .boton-primario:hover {
+            background-color: #1677D8;
+            border-color: #1677D8;
+            box-shadow: 0 8px 22px rgba(22, 119, 216, 0.28);
+            transform: translateY(-1px);
+        }
+
+        .boton-secundario {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #004C97;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .boton-secundario:hover {
+            color: #1677D8;
+        }
+
+        .boton-secundario i {
+            margin-right: 6px;
+        }
+
+        /* Resultado */
+        .resultado {
+            background: #F8FBFF;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.8rem;
+            text-align: left;
+            border: 1px solid #E1F0FF;
+        }
+
+        .resultado h3 {
+            font-size: 1.2rem;
+            color: #292E38;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .resultado p {
+            font-size: 0.95rem;
+            color: #444C5E;
+            margin-bottom: 0.5rem;
+        }
+
+        .resultado span {
+            font-weight: 700;
+            color: #004C97;
+        }
+
+        .tabla-amortizacion {
+            margin-top: 1.2rem;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        th {
+            background: #E1F0FF;
+            color: #004C97;
+            font-weight: 600;
+            padding: 10px 6px;
+            text-align: center;
+            border-radius: 6px 6px 0 0;
+        }
+
+        td {
+            padding: 8px 6px;
+            text-align: right;
+            border-bottom: 1px solid #E1F0FF;
+        }
+
+        td:first-child, th:first-child {
+            text-align: center;
+        }
+
+        .oculto {
+            display: none;
+        }
+
+        footer {
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #E1F0FF;
+            font-size: 0.8rem;
+            color: #6F7583;
+        }
+
+        @media (max-width: 480px) {
+            .pantalla {
+                padding: 2rem 1.5rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pantalla">
+        <header>
+            <div class="icono-banco">
+                <i class="fas fa-piggy-bank"></i>
+            </div>
+            <h1>Banco IPSY</h1>
+            <p class="subtitulo">Simulador de préstamos</p>
+        </header>
+
+        <main>
+            <form id="loan-form" class="formulario">
+                <div class="campo">
+                    <label for="monto">Monto del préstamo ($)</label>
+                    <input type="number" id="monto" required min="500" step="0.01" placeholder="Ej: 10,000">
+                </div>
+                <div class="campo">
+                    <label for="tasa">Tasa de interés anual (%)</label>
+                    <input type="number" id="tasa" required min="0" step="0.01" placeholder="Ej: 12">
+                </div>
+                <div class="campo">
+                    <label for="plazo">Plazo (meses)</label>
+                    <input type="number" id="plazo" required min="1" step="1" placeholder="Ej: 24">
+                </div>
+                <button type="submit" class="boton-primario">
+                    <i class="fas fa-calculator"></i> Calcular cuota
+                </button>
+            </form>
+
+            <!-- Resultado (oculto hasta calcular) -->
+            <div id="resultado" class="resultado oculto">
+                <h3>Resultado</h3>
+                <p>Cuota mensual: <span id="cuota"></span></p>
+                <p>Total a pagar: <span id="total"></span></p>
+                <p>Intereses totales: <span id="intereses"></span></p>
+                <button id="ver-tabla" class="boton-secundario" style="background:none; border:none; padding:0; cursor:pointer;">
+                    <i class="fas fa-table"></i> Ver tabla de amortización
+                </button>
+                <div id="tabla-amortizacion" class="tabla-amortizacion oculto"></div>
+            </div>
+
+            <a href="index.html" class="boton-secundario">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </main>
+
+        <footer>
+            <p>© 2025 Banco IPSY</p>
+        </footer>
+    </div>
+
+    <!-- Lógica del simulador (método francés) -->
+    <script>
+    // Función para formatear con comas de miles y punto decimal
+    function formatearNumero(num) {
+        return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    document.getElementById('loan-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const monto = parseFloat(document.getElementById('monto').value);
+        const tasaAnual = parseFloat(document.getElementById('tasa').value);
+        const plazo = parseInt(document.getElementById('plazo').value);
+        
+        if (isNaN(monto) || isNaN(tasaAnual) || isNaN(plazo) || monto <= 0 || tasaAnual < 0 || plazo <= 0) {
+            alert('Por favor, ingresa valores válidos.');
+            return;
+        }
+        
+        const tasaMensual = (tasaAnual / 100) / 12;
+        let cuota;
+        if (tasaMensual === 0) {
+            cuota = monto / plazo;
+        } else {
+            cuota = monto * (tasaMensual * Math.pow(1 + tasaMensual, plazo)) / (Math.pow(1 + tasaMensual, plazo) - 1);
+        }
+        
+        const totalPagado = cuota * plazo;
+        const interesesTotales = totalPagado - monto;
+        
+        document.getElementById('cuota').textContent = '$' + formatearNumero(cuota);
+        document.getElementById('total').textContent = '$' + formatearNumero(totalPagado);
+        document.getElementById('intereses').textContent = '$' + formatearNumero(interesesTotales);
+        document.getElementById('resultado').classList.remove('oculto');
+        document.getElementById('tabla-amortizacion').classList.add('oculto');
+        document.getElementById('tabla-amortizacion').innerHTML = '';
+    });
+
+    document.getElementById('ver-tabla').addEventListener('click', function() {
+        const monto = parseFloat(document.getElementById('monto').value);
+        const tasaAnual = parseFloat(document.getElementById('tasa').value);
+        const plazo = parseInt(document.getElementById('plazo').value);
+        const tasaMensual = (tasaAnual / 100) / 12;
+        
+        let saldo = monto;
+        let cuota;
+        if (tasaMensual === 0) {
+            cuota = monto / plazo;
+        } else {
+            cuota = monto * (tasaMensual * Math.pow(1 + tasaMensual, plazo)) / (Math.pow(1 + tasaMensual, plazo) - 1);
+        }
+        
+        let html = '<table><tr><th>Mes</th><th>Cuota</th><th>Interés</th><th>Capital</th><th>Saldo</th></tr>';
+        
+        for (let i = 1; i <= plazo; i++) {
+            const interes = saldo * tasaMensual;
+            const capital = cuota - interes;
+            saldo -= capital;
+            html += `<tr>
+                <td>${i}</td>
+                <td>$${formatearNumero(cuota)}</td>
+                <td>$${formatearNumero(interes)}</td>
+                <td>$${formatearNumero(capital)}</td>
+                <td>$${formatearNumero(Math.max(0, saldo))}</td>
+            </tr>`;
+        }
+        html += '</table>';
+        
+        document.getElementById('tabla-amortizacion').innerHTML = html;
+        document.getElementById('tabla-amortizacion').classList.remove('oculto');
+    });
+</script>
+</body>
+</html>
